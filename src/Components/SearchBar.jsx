@@ -14,13 +14,16 @@ const handleSearch=(e)=>{
 
 
 const fetchWeather=async()=>{
-  console.log("weather ")
+  try{
   const response=await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${inp}&appid=${API_KEY}&units=metric`
   )
   const data=await response.json()
   console.log(data)
   setWeather(data)
+}catch(e){
+ console.log(e)
+}
 }
 
   return (
@@ -30,11 +33,17 @@ const fetchWeather=async()=>{
         <button className='btn' onClick={fetchWeather}><Search style={{height:"20px"}} /></button>
         </div>
         <div>
-           {weather && (
+           {weather && weather.cod===200 && (
             <div className='city'>
               City:{weather.name}<br/>
               Temperature: {weather.main.temp}°C <br />
               Weather: {weather.weather[0].description}
+            </div>
+           )}
+
+           {weather && weather.cod!==200 && (
+            <div className='city'>
+              {weather.message}
             </div>
            )}
         </div>
