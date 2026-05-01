@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import { Search } from 'lucide-react';
-
-const API_KEY="bd959b2194a9580f775a6f06864def9a"
 
 const SearchBar = () => {
     const [inp,setInp]=useState('')
+    const [weather,setWeather]=useState(null)
+
+const API_KEY="bd959b2194a9580f775a6f06864def9a"
 
 const handleSearch=(e)=>{
         setInp(e.target.value)
@@ -19,18 +20,23 @@ const fetchWeather=async()=>{
   )
   const data=await response.json()
   console.log(data)
+  setWeather(data)
 }
 
   return (
     <div className='container'>
         <div className='searchBar'> 
-        <input value={inp} onChange={handleSearch} className="search" type="text" placeholder='    Enter City Name'/>
+        <input value={inp} onChange={handleSearch} className="search" type="text" placeholder='Enter City Name'/>
         <button className='btn' onClick={fetchWeather}><Search style={{height:"20px"}} /></button>
         </div>
         <div>
-          <p>
-      
-          </p>
+           {weather && (
+            <div className='city'>
+              City:{weather.name}<br/>
+              Temperature: {weather.main.temp}°C <br />
+              Weather: {weather.weather[0].description}
+            </div>
+           )}
         </div>
     </div>
   )
